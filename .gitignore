@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.spec
+
+# Virtual Environments
+venv/
+ENV/
+env/
+
+# Mac OS specific
+.DS_Store
+
+# Audio & Output temp files
+*.mp3
+*.wav
+*.m4a
+*.txt
+*.json
+temp_chunks/
+
+# Environment variables (API keys)
+.env
