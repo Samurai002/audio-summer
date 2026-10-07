@@ -20,6 +20,7 @@ env/
 .DS_Store
 
 # Audio & Output temp files
+*.ogg
 *.mp3
 *.wav
 *.m4a
