@@ -1,0 +1,46 @@
+name: Build Windows Executable
+
+# Запуск по пушу в ветку main/master или вручную через кнопку на GitHub
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 Клонирование репозитория
+        uses: actions/checkout@v4
+
+      - name: 🐍 Установка Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 🎵 Скачивание портативного FFmpeg для Windows
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/ffbinaries/ffbinaries-prebuilt/releases/download/v6.1/ffmpeg-6.1-win-64.zip" -OutFile "ffmpeg.zip"
+          Expand-Archive -Path "ffmpeg.zip" -DestinationPath "."
+          Remove-Item "ffmpeg.zip"
+          Get-ChildItem ffmpeg.exe
+
+      - name: 📦 Установка зависимостей
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: 🔨 Сборка приложения через PyInstaller
+        run: |
+          pyinstaller app.spec
+
+      - name: 📤 Загрузка готового .exe файла
+        uses: actions/upload-artifact@v4
+        with:
+          name: AudioSummarizer-Windows
+          path: dist/AudioSummarizer.exe
+          retention-days: 14
